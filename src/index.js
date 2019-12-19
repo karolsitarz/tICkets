@@ -2,27 +2,46 @@ import PDFJS, { getDocument } from 'pdfjs-dist/webpack';
 
 const mappedData = data => ({
   origin: {
-    date: data[16].str,
-    time: data[18].str,
-    place: data[20].str
+    date: data[20].str,
+    time: data[22].str,
+    place: data[24].str
   },
   destination: {
-    date: data[25].str,
-    time: data[27].str,
-    place: data[23].str
+    date: data[29].str,
+    time: data[31].str,
+    place: data[27].str
   },
   ticket: {
-    price: data[33].str,
-    id: data[36].str.substring(2)
+    price: data[37].str,
+    id: data[40].str.substring(2)
   },
   train: {
-    id: data[53].str,
-    class: data[29].str,
-    car: data[54].str,
-    seat: data[56].str
+    id: data[57].str,
+    class: data[33].str,
+    car: data[58].str,
+    seat: data[60].str
   },
-  distance: data[55].str
+  distance: data[59].str
 });
+
+const generateSVGfromArray = (array, qrSize) => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${qrSize} ${qrSize}`);
+  svg.style.width = '10em';
+
+  array.forEach((el, i) => {
+    if (el < 250) {
+      const point = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      point.setAttribute('width', 1);
+      point.setAttribute('height', 1);
+      point.setAttribute('y', Math.floor(i / qrSize));
+      point.setAttribute('x', i % qrSize);
+      point.style.shapeRendering = 'crispEdges';
+      svg.appendChild(point);
+    }
+  });
+  document.body.appendChild(svg);
+};
 
 document.getElementById('file').addEventListener('change', async e => {
   const { files } = e.target;
@@ -35,26 +54,35 @@ document.getElementById('file').addEventListener('change', async e => {
     const doc = await getDocument(e.target.result).promise;
     const page = await doc.getPage(1);
     const text = await page.getTextContent();
+    // if (text.items[7].str !== '"PKP Intercity"') {
+    //   console.log('incorrect ticket', text.items);
+    //   return;
+    // }
+
     await page.getOperatorList();
     page.objs.get('img_p0_2', img => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
       const { height, width, data } = img;
+      const RGB = 3;
+      const pxSize = 2;
+      const qrSize = Math.sqrt(data.length / RGB) / pxSize;
 
-      const buffer = new Uint8ClampedArray(width * height * 4);
-      const imageData = ctx.createImageData(width, height);
-      for (let i = 0; i < data.length; i += 3) {
-        const j = i + i / 3;
-        buffer[j] = data[i];
-        buffer[j + 1] = data[i + 1];
-        buffer[j + 2] = data[i + 2];
-        buffer[j + 3] = 255;
-      }
-      imageData.data.set(buffer);
-      ctx.putImageData(imageData, 0, 0);
+      const temp = [];
+
+      for (let i = 0; i < qrSize; i++)
+        for (let j = 0; j < qrSize; j++)
+          temp[i * qrSize + j] = Math.round(
+            data[(i * qrSize * pxSize + j) * RGB * pxSize]
+          );
+
+      generateSVGfromArray(temp, qrSize);
+      console.log({
+        items: text.items.map(e => e.str),
+        a: page.objs
+      });
+
       console.log({
         ...mappedData(text.items),
-        qr: canvas.toDataURL()
+        qr: temp
       });
     });
   };
