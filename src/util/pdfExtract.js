@@ -1,3 +1,6 @@
+import { getDocument } from 'pdfjs-dist/webpack';
+import { getCodeArray } from './qrCode';
+
 const convertDateToMs = (date, time, buyDate) => {
   const [d, m] = date.split('.');
   const y = buyDate[0] * 1 + (m >= buyDate[1] ? 0 : 1);
@@ -34,4 +37,29 @@ const mapData = data => {
   return temp;
 };
 
-export default mapData;
+const readPDF = e =>
+  new Promise((resolve, reject) => {
+    const { files } = e.target;
+    if (files.length === 0) return;
+    if (!files[0]) return;
+
+    const fr = new FileReader();
+    fr.readAsArrayBuffer(files[0]);
+    fr.onload = async e => {
+      if (!e.target.result) return;
+      const doc = await getDocument(e.target.result).promise;
+      const page = await doc.getPage(1);
+      const text = await page.getTextContent();
+
+      await page.getOperatorList();
+      page.objs.get('img_p0_2', ({ data }) => {
+        const code = getCodeArray(data);
+        resolve({
+          code,
+          journeys: mapData(text.items.map(el => el.str))
+        });
+      });
+    };
+  });
+
+export default readPDF;
