@@ -25,6 +25,7 @@ const AddTicket = () => {
   const [store, setStore] = useContext(TicketContext);
   const handleChange = async e => {
     const data = await pdfExtract(e);
+    if (store.findIndex(el => el.id === data.id) >= 0) return;
     setStore([...store, data]);
   };
   return (

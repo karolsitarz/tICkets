@@ -37,6 +37,11 @@ const mapData = data => {
   return temp;
 };
 
+const getTicketId = data => {
+  const i = data.findIndex(el => el === 'Nr biletu');
+  return data[i + 1].substr(2);
+};
+
 const readPDF = e =>
   new Promise((resolve, reject) => {
     const { files } = e.target;
@@ -54,9 +59,12 @@ const readPDF = e =>
       await page.getOperatorList();
       page.objs.get('img_p0_2', ({ data }) => {
         const code = getCodeArray(data);
+        const items = text.items.map(el => el.str);
+
         resolve({
           code,
-          journeys: mapData(text.items.map(el => el.str))
+          id: getTicketId(items),
+          journeys: mapData(items)
         });
       });
     };
