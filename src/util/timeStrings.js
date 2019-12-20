@@ -12,13 +12,18 @@ export default time => {
   const displayTime =
     writeWith0(timeObj.getHours()) + ':' + writeWith0(timeObj.getMinutes());
 
-  if (time - current > 0 && time - current < hour * 18)
+  const diff = time - current;
+
+  if (diff < 0 || diff > day * 6)
     return {
       time: displayTime,
-      date: null
+      date:
+        writeWith0(timeObj.getDate()) +
+        '.' +
+        writeWith0(timeObj.getMonth() * 1 + 1)
     };
 
-  if (time - current > 0 && time - current < day * 6)
+  if (diff > hour * 18)
     return {
       time: displayTime,
       date: weekDays[timeObj.getDay()]
@@ -26,9 +31,6 @@ export default time => {
 
   return {
     time: displayTime,
-    date:
-      writeWith0(timeObj.getMonth() * 1 + 1) +
-      '.' +
-      writeWith0(timeObj.getDate())
+    date: null
   };
 };

@@ -59,8 +59,8 @@ const Journey = ({ journeys, code }) => {
       _disabled={destination.time - new Date().getTime() < -hour * 3}
     >
       <TimeDate>
-        {date && <div>{date}</div>}
         <div>{time}</div>
+        {date && <div>{date}</div>}
       </TimeDate>
       <div>
         <h1>{destination.place}</h1>
