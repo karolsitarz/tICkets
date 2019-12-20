@@ -29,7 +29,7 @@ const AddTicket = () => {
   };
   return (
     <Label>
-      <Button>t</Button>
+      <Button>+</Button>
       <input type="file" accept="application/pdf" onChange={handleChange} />
     </Label>
   );

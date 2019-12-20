@@ -46,18 +46,6 @@ export default createGlobalStyle`
     width: 100%;
     height: 100%;
   }
-  input {
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
-  }
-  ::placeholder {
-    text-align: center;
-    opacity: 0.25;
-  }
-  span {
-    pointer-events: none;
-  }
 
   ::-webkit-scrollbar {
     width: 0 !important;
@@ -65,5 +53,7 @@ export default createGlobalStyle`
   }
   :root {
     letter-spacing: -.05em;
+    font-size: 20px;
+    color: #333;
   }
 `;

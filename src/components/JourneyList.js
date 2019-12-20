@@ -10,7 +10,9 @@ const List = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
+  flex-grow: 1;
+  padding: 1em 0;
 `;
 
 const JourneyList = () => {
