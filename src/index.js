@@ -16,7 +16,7 @@ document.getElementById('file').addEventListener('change', async e => {
     await page.getOperatorList();
     page.objs.get('img_p0_2', ({ data }) => {
       document.body.appendChild(getSVGQR(data));
-      console.log({ items: text.items.map(e => e.str) });
+      // console.log({ items: text.items.map(e => e.str) });
       console.log({
         ...mapData(text.items.map(el => el.str))
       });
