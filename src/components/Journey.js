@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import timeStrings, { hour } from '../util/timeStrings';
 
 const TimeDate = styled.div`
   width: 3.5em;
@@ -12,11 +14,22 @@ const TimeDate = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 1.5em;
+  div {
+    font-weight: bold;
+    font-size: 0.75em;
+  }
 `;
 
 const StyledJourney = styled.div`
   display: flex;
   padding: 0.5em 1.5em;
+  order: ${({ _order }) => _order / 1000};
+  ${({ _disabled }) =>
+    _disabled &&
+    css`
+      opacity: 0.5;
+      background-color: whitesmoke;
+    `};
   h1 {
     font-size: 1.1em;
   }
@@ -38,13 +51,16 @@ const Journey = ({ journeys, code }) => {
     train: { car, seat, id }
   } = journeys[0];
 
-  console.log(journeys[0]);
+  const { time, date } = timeStrings(origin.time);
 
   return (
-    <StyledJourney>
+    <StyledJourney
+      _order={origin.time}
+      _disabled={destination.time - new Date().getTime() < -hour * 3}
+    >
       <TimeDate>
-        <div></div>
-        <div></div>
+        {date && <div>{date}</div>}
+        <div>{time}</div>
       </TimeDate>
       <div>
         <h1>{destination.place}</h1>

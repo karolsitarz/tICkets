@@ -8,8 +8,8 @@ const List = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
   align-items: stretch;
   flex-grow: 1;
   padding: 1em 0;
