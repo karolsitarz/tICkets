@@ -4,20 +4,20 @@ const scale = 4;
 
 const getQrSize = data => Math.sqrt(data.length / RGB) / pxSize;
 
-const getCodeArray = data => {
+export const getCodeArray = data => {
   const temp = [];
   const qrSize = getQrSize(data);
 
   for (let i = 0; i < qrSize; i++)
     for (let j = 0; j < qrSize; j++)
-      temp[i * qrSize + j] = data[(i * qrSize * pxSize + j) * RGB * pxSize];
+      temp[i * qrSize + j] =
+        data[(i * qrSize * pxSize + j) * RGB * pxSize] === 0 ? true : false;
 
   return temp;
 };
 
-const getCanvas = data => {
-  const code = getCodeArray(data);
-  const qrSize = getQrSize(data);
+const getCanvas = array => {
+  const qrSize = Math.sqrt(array.length);
 
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -25,10 +25,11 @@ const getCanvas = data => {
   canvas.height = qrSize * scale;
   ctx.fillStyle = '#000000';
 
-  code.forEach((el, i) => {
+  array.forEach((el, i) => {
+    if (!el) return;
     const x = (i % qrSize) * scale;
     const y = Math.floor(i / qrSize) * scale;
-    if (el < 250) ctx.fillRect(x, y, scale, scale);
+    ctx.fillRect(x, y, scale, scale);
   });
   return canvas;
 };

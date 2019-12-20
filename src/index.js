@@ -1,5 +1,6 @@
 import { getDocument } from 'pdfjs-dist/webpack';
-import mapData, { getSVGQR } from './util/pdfExtract';
+import mapData from './util/pdfExtract';
+import getCanvas, { getCodeArray } from './util/qrCode';
 
 document.getElementById('file').addEventListener('change', async e => {
   const { files } = e.target;
@@ -15,10 +16,11 @@ document.getElementById('file').addEventListener('change', async e => {
 
     await page.getOperatorList();
     page.objs.get('img_p0_2', ({ data }) => {
-      document.body.appendChild(getSVGQR(data));
-      // console.log({ items: text.items.map(e => e.str) });
+      const array = getCodeArray(data);
+      document.body.appendChild(getCanvas(array));
       console.log({
-        ...mapData(text.items.map(el => el.str))
+        code: array,
+        journeys: mapData(text.items.map(el => el.str))
       });
     });
   };
