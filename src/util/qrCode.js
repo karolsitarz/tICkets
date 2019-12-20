@@ -16,10 +16,9 @@ export const getCodeArray = data => {
   return temp;
 };
 
-const getCanvas = array => {
+const drawQrOnCanvas = (array, canvas) => {
   const qrSize = Math.sqrt(array.length);
 
-  const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = qrSize * scale;
   canvas.height = qrSize * scale;
@@ -34,4 +33,4 @@ const getCanvas = array => {
   return canvas;
 };
 
-export default getCanvas;
+export default drawQrOnCanvas;
