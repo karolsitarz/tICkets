@@ -9,6 +9,7 @@ const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0 1em;
+  flex-shrink: 0;
 `;
 
 const Navbar = () => (
