@@ -3,18 +3,22 @@ import styled from 'styled-components';
 import AddTicket from './AddTicket';
 
 const Nav = styled.nav`
-  height: 3em;
-  background-color: whitesmoke;
+  height: 3.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 1.5em;
   flex-shrink: 0;
+`;
+
+const Title = styled.span`
+  font-weight: bold;
+  font-size: 1.25em;
 `;
 
 const Navbar = () => (
   <Nav>
-    <span>test2</span>
+    <Title>Hello.</Title>
     <AddTicket />
   </Nav>
 );

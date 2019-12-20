@@ -13,6 +13,16 @@ const StyledCard = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 1.5em;
+    width: 5em;
+    height: 0.25em;
+    background-color: #ddd;
+    border-radius: 1em;
+  }
 `;
 
 const Card = () => (

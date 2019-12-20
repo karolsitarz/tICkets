@@ -19,7 +19,7 @@ const JourneyList = () => {
   return (
     <List>
       {store.map(data => (
-        <Journey key={data.journeys[0].origin.time} {...data} />
+        <Journey key={data.id} {...data} />
       ))}
     </List>
   );

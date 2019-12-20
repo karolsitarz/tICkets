@@ -15,9 +15,10 @@ const Button = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 25%;
+  color: #fff;
   width: 2em;
   height: 2em;
-  background: palegreen;
+  background: #666;
   cursor: pointer;
 `;
 
