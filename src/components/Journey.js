@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 import timeStrings, { hour } from '../util/timeStrings';
+import { TimeContext } from '../context/timeContext';
 
 const TimeDate = styled.div`
   width: 3.5em;
@@ -45,18 +46,19 @@ const StyledJourney = styled.div`
 `;
 
 const Journey = ({ journeys, code }) => {
+  const [currentTime] = useContext(TimeContext);
   const {
     origin,
     destination,
     train: { car, seat, id }
   } = journeys[0];
 
-  const { time, date } = timeStrings(origin.time);
+  const { time, date } = timeStrings(origin.time, currentTime);
 
   return (
     <StyledJourney
       _order={origin.time}
-      _disabled={destination.time - new Date().getTime() < -hour * 3}
+      _disabled={destination.time - currentTime < -hour * 1}
     >
       <TimeDate>
         <div>{time}</div>
@@ -73,6 +75,11 @@ const Journey = ({ journeys, code }) => {
       </div>
     </StyledJourney>
   );
+};
+
+Journey.propTypes = {
+  code: PropTypes.arrayOf(PropTypes.bool),
+  journeys: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default Journey;

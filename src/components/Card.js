@@ -2,6 +2,7 @@ import React, { useContext, useRef, useLayoutEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { TicketContext } from '../context';
+import { TimeContext } from '../context/timeContext';
 import drawQrOnCanvas from '../util/qrCode';
 
 const StyledCard = styled.div`
@@ -36,8 +37,7 @@ const StyledCard = styled.div`
   }
 `;
 
-const getCurrentJourney = store => {
-  const time = new Date().getTime();
+const getCurrentJourney = (store, time) => {
   for (let el of store) {
     for (let journey of el.journeys)
       if (journey.origin.time <= time && journey.destination.time >= time)
@@ -104,20 +104,28 @@ const BigQrModal = styled.div`
 
 const Card = () => {
   const [store] = useContext(TicketContext);
+  const [time] = useContext(TimeContext);
   const [isBigQR, setBigQR] = useState(false);
-  const current = getCurrentJourney(store);
-  if (current === null) return null;
-
-  const { code, journey } = current;
-  const { origin, destination } = journey;
-
   const canvasPreview = useRef(null);
   const canvasBig = useRef(null);
-  useLayoutEffect(() => {
-    if (canvasPreview.current) drawQrOnCanvas(code, canvasPreview.current);
-    if (canvasBig.current) drawQrOnCanvas(code, canvasBig.current);
-  }, []);
 
+  const current = getCurrentJourney(store, time);
+
+  useLayoutEffect(() => {
+    if (current == null) return;
+
+    const { code } = current;
+    if (canvasPreview.current) {
+      drawQrOnCanvas(code, canvasPreview.current);
+    }
+    if (canvasBig.current) {
+      drawQrOnCanvas(code, canvasBig.current);
+    }
+  }, [time]);
+
+  if (current === null) return null;
+
+  const { origin, destination } = current.journey;
   return (
     <>
       <StyledCard>

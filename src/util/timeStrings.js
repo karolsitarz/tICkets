@@ -5,8 +5,7 @@ const weekDays = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt'];
 
 const writeWith0 = val => (val < 10 ? '0' + val : val);
 
-export default time => {
-  const current = new Date().getTime();
+export default (time, current) => {
   const timeObj = new Date(time);
 
   const displayTime =

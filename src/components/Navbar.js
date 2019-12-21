@@ -13,12 +13,12 @@ const Nav = styled.nav`
 
 const Title = styled.span`
   font-weight: bold;
-  font-size: 1.25em;
+  font-size: 1.5em;
 `;
 
 const Navbar = () => (
   <Nav>
-    <Title>Hello.</Title>
+    <Title>tICkets</Title>
     <AddTicket />
   </Nav>
 );

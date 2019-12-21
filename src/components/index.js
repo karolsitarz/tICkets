@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import Navbar from './Navbar';
 import JourneyList from './JourneyList';
 import Card from './Card';
+import { TimeContext } from '../context/timeContext';
 
 const Container = styled.div`
   display: flex;
@@ -18,14 +19,21 @@ const Container = styled.div`
   overflow-y: auto;
 `;
 
-const App = () => (
-  <>
-    <Container>
-      <Navbar />
-      <JourneyList />
-    </Container>
-    <Card />
-  </>
-);
+const App = () => {
+  const [, setTime] = useContext(TimeContext);
+  window.setTime = val => {
+    const time = new Date(val).getTime();
+    time && setTime(time);
+  };
+  return (
+    <>
+      <Container>
+        <Navbar />
+        <JourneyList />
+      </Container>
+      <Card />
+    </>
+  );
+};
 
 export default App;
