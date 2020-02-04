@@ -53,7 +53,6 @@ export default createGlobalStyle`
   }
   :root {
     letter-spacing: -.05em;
-    font-size: 20px;
     color: #333;
   }
 `;

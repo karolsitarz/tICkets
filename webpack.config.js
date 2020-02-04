@@ -9,14 +9,19 @@ module.exports = (env, argv) => {
     name: 'client',
     target: 'web',
     entry: './src/index',
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.jsx?$/,
           exclude: /node_modules/,
-          use: [{
+          use: [
+            {
               loader: 'babel-loader'
-            }]
+            }
+          ]
         }
       ]
     },
