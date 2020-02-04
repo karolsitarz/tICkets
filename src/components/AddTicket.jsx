@@ -6,19 +6,21 @@ import { ticketActions } from '../stores/tickets';
 import pdfExtract from '../util/pdfExtract';
 
 const Label = styled.label`
+  align-self: center;
+  margin: 3em 0;
   > input {
     display: none;
   }
 `;
 
 const Button = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  color: #505050;
+  background: #f1f1f1;
+  padding: 1em 3em;
   border-radius: 1em;
-  color: #fff;
-  background: #666;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 5px 20px #00000040;
 `;
 
 const AddTicket = () => {
@@ -33,7 +35,7 @@ const AddTicket = () => {
   };
   return (
     <Label>
-      <Button>Add ticket</Button>
+      <Button>New ticket</Button>
       <input type="file" accept="application/pdf" onChange={handleChange} />
     </Label>
   );

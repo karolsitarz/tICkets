@@ -1,14 +1,14 @@
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Montserrat:500,700&display=swap&subset=latin-ext');
+  @import url('https://fonts.googleapis.com/css?family=Work+Sans:400,600&display=swap&subset=latin-ext');
 
   *,
   ::after,
   ::before {
     box-sizing: border-box;
     position: relative;
-    font-family: 'Montserrat', 'Helvetica', 'Helvetica Neue', sans-serif;
+    font-family: 'Work Sans', 'Helvetica', 'Helvetica Neue', sans-serif;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-tap-highlight-color: transparent;
   }

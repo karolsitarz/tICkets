@@ -33,6 +33,7 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
+    "@glidejs/glide": "^3.4.1",
     "pdfjs-dist": "^2.2.228",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
