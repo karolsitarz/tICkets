@@ -9,6 +9,19 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #e5e5e5;
   height: 100%;
+  &::before {
+    content: '';
+    position: fixed;
+    background: #dbdbdb;
+    width: 200vh;
+    min-width: 150vw;
+    height: 100vh;
+    left: 50%;
+    bottom: -50vh;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
 `;
 
 const Titles = styled.div`
