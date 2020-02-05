@@ -9,6 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #e5e5e5;
   height: 100%;
+  overflow: hidden;
   &::before {
     content: '';
     position: fixed;

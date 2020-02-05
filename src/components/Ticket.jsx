@@ -18,6 +18,7 @@ const TicketContainer = styled.div`
   background-image: linear-gradient(to bottom right, #b26eca, #ffcf96);
   color: white;
   height: 100%;
+  box-shadow: 0 1em 2em #00000040;
 `;
 
 const Date = styled.span`

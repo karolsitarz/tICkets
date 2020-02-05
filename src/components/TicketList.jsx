@@ -7,8 +7,10 @@ import ScrollInput from './ScrollInput';
 
 const TicketScrollContainer = styled.div`
   display: flex;
-  overflow: hidden;
   flex-grow: 1;
+  > div {
+    align-items: flex-end;
+  }
 `;
 
 const TicketList = () => {

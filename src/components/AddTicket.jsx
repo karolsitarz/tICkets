@@ -20,7 +20,7 @@ const Button = styled.div`
   border-radius: 1em;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 5px 20px #00000040;
+  box-shadow: 0 1em 2em #00000040;
 `;
 
 const AddTicket = () => {
