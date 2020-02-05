@@ -36,28 +36,45 @@ const ScrollInput = ({
   let locked = true;
   let lockedPos;
 
+  let current = initial;
+
   const posAccessor = horizontal ? 'clientX' : 'clientY';
   const sizeAccessor = horizontal ? 'width' : 'height';
 
-  const refreshLayout = () => {
-    containerSize = containerDOM.current.getBoundingClientRect()[sizeAccessor];
-  };
+  const getContainerSize = () =>
+    containerDOM.current.getBoundingClientRect()[sizeAccessor];
 
   //register and unregister events
   useEffect(() => {
+    if (children.length === 0) return;
+    handleResize();
+
     containerDOM.current.addEventListener('pointerdown', handlePointerDown);
     containerDOM.current.style.touchAction = 'none';
-    refreshLayout();
+    window.addEventListener('resize', handleResize);
 
-    return () =>
+    return () => {
       containerDOM.current.removeEventListener(
         'pointerdown',
         handlePointerDown
       );
-  }, []);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [children]);
 
-  // generate child dimensions array
-  useEffect(() => {
+  const moveToN = n => {
+    current = n > 0 && n < valuesSize.length ? n : 0;
+    move = containerSize / 2 - valuesSize[current].middle;
+    transform(move);
+  };
+
+  const handleResize = () => {
+    valuesSize = getValuesSize();
+    containerSize = getContainerSize();
+    moveToN(current);
+  };
+
+  const getValuesSize = () => {
     const values = wrapperDOM.current.children;
     const accessor = horizontal
       ? {
@@ -83,11 +100,8 @@ const ScrollInput = ({
         middle: start + size / 2
       });
     }
-    valuesSize = temp;
-    const initialPos = initial > 0 && initial < valuesSize.length ? initial : 0;
-    move = containerSize / 2 - valuesSize[initialPos].middle;
-    transform(move);
-  }, [children]);
+    return temp;
+  };
 
   const transform = val => {
     if (horizontal) {
@@ -133,14 +147,6 @@ const ScrollInput = ({
     pos = e[posAccessor];
   };
 
-  const getCurrentEl = pos => {
-    let elementIndex =
-      valuesSize.findIndex(({ start }) => start > pos + containerSize / 2) - 1;
-    if (elementIndex === -1) elementIndex = 0;
-    else if (elementIndex === -2) elementIndex = valuesSize.length - 1;
-    return elementIndex;
-  };
-
   const handlePointerUp = e => {
     e.preventDefault();
     const removeListeners = () => {
@@ -159,9 +165,12 @@ const ScrollInput = ({
     // distance that will be traveled, calculated by acceleration and friction
     const dist = -(move + acc / (1 - friction));
 
-    const elementIndex = getCurrentEl(dist);
+    current =
+      valuesSize.findIndex(({ start }) => start > dist + containerSize / 2) - 1;
+    if (current === -1) current = 0;
+    else if (current === -2) current = valuesSize.length - 1;
 
-    const newDist = valuesSize[elementIndex].middle - containerSize / 2;
+    const newDist = valuesSize[current].middle - containerSize / 2;
     // correct acceleration
     acc = -(newDist - -move) * (1 - friction);
 
@@ -173,7 +182,7 @@ const ScrollInput = ({
     if (!free) return;
     if (Math.abs(acc) < 0.1) {
       acc = 0;
-      onStop && onStop(getCurrentEl(-move));
+      onStop && onStop(current);
       return;
     }
 
