@@ -46,6 +46,7 @@ const ScrollInput = ({
   //register and unregister events
   useEffect(() => {
     containerDOM.current.addEventListener('pointerdown', handlePointerDown);
+    containerDOM.current.style.touchAction = 'none';
     refreshLayout();
 
     return () =>
@@ -86,7 +87,6 @@ const ScrollInput = ({
     const initialPos = initial > 0 && initial < valuesSize.length ? initial : 0;
     move = containerSize / 2 - valuesSize[initialPos].middle;
     transform(move);
-    console.log(valuesSize);
   }, [children]);
 
   const transform = val => {

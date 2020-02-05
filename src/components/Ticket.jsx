@@ -45,6 +45,9 @@ const Ticket = ({ journeys, code }) => {
       <Time>{destinationTime.time}</Time>
       <City>{journeys[0].origin.place}</City>
       <Time>{originTime.time}</Time>
+      <span>{journeys[0].train.id}</span>
+      <span>{journeys[0].train.car}</span>
+      <span>{journeys[0].train.seat}</span>
     </TicketContainer>
   );
 };
