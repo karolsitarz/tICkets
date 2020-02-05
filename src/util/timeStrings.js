@@ -22,7 +22,7 @@ export default (time, current) => {
 
   const diff = time - current;
 
-  if (diff < 0 || diff > day * 6)
+  if (diff < hour * -6 || diff > day * 6)
     return {
       time: displayTime,
       date:
