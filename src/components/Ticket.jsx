@@ -18,7 +18,6 @@ const TicketContainer = styled.div`
   background-image: linear-gradient(to bottom right, #b26eca, #ffcf96);
   color: white;
   height: 100%;
-  order: ${props => parseInt(props._order / 120000)};
 `;
 
 const Date = styled.span`
@@ -40,7 +39,7 @@ const Ticket = ({ journeys, code }) => {
   const originTime = timeStrings(journeys[0].origin.time, time);
   const destinationTime = timeStrings(journeys[0].destination.time, time);
   return (
-    <TicketContainer _order={journeys[0].origin.time}>
+    <TicketContainer>
       <Date>{originTime.date}</Date>
       <City>{journeys[0].destination.place}</City>
       <Time>{destinationTime.time}</Time>
