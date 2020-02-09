@@ -11,9 +11,9 @@ const Main = styled.svg`
 `;
 
 const Shape = styled.rect`
-  fill: red;
   width: 100%;
   height: 100%;
+  fill: url(#gradientFill);
 `;
 
 const MaskBg = styled.rect`
@@ -39,3 +39,25 @@ const TicketBg = () => (
 );
 
 export default TicketBg;
+
+const GradientSvg = styled.svg`
+  height: 0;
+  width: 0;
+  position: absolute;
+  visibility: hidden;
+`;
+const GradientStop = styled.stop`
+  stop-opacity: ${({ _opacity }) => _opacity || 1};
+  stop-color: ${({ _color }) => _color || '#fff'};
+`;
+
+export const TicketGradient = () => (
+  <GradientSvg>
+    <defs>
+      <linearGradient id="gradientFill" x1="0%" y1="0%" x2="100%" y2="100%">
+        <GradientStop offset="0%" _color="#b26eca" />
+        <GradientStop offset="100%" _color="#ffcf96" />
+      </linearGradient>
+    </defs>
+  </GradientSvg>
+);
