@@ -55,8 +55,8 @@ export const TicketGradient = () => (
   <GradientSvg>
     <defs>
       <linearGradient id="gradientFill" x1="0%" y1="0%" x2="100%" y2="100%">
-        <GradientStop offset="0%" _color="#b26eca" />
-        <GradientStop offset="100%" _color="#ffcf96" />
+        <GradientStop offset="0%" _color="#db40f7" />
+        <GradientStop offset="100%" _color="#ffcb3f" />
       </linearGradient>
     </defs>
   </GradientSvg>
