@@ -1,19 +1,17 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import { TicketProvider } from './context';
-import { TimeProvider } from './context/timeContext';
+import store from './stores';
 import GlobalStyles from './style/global-styles';
 import App from './components';
 
 ReactDOM.render(
   <>
     <GlobalStyles />
-    <TicketProvider>
-      <TimeProvider>
-        <App />
-      </TimeProvider>
-    </TicketProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </>,
   document.getElementById('container')
 );

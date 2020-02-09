@@ -1,9 +1,18 @@
 export const hour = 1000 * 60 * 60;
 export const day = hour * 24;
 
-const weekDays = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt'];
+const weekDays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+const today = 'Today';
 
-const writeWith0 = val => (val < 10 ? '0' + val : val);
+const writeWith0 = val => (val < 10 ? `0${val}` : val);
 
 export default (time, current) => {
   const timeObj = new Date(time);
@@ -13,7 +22,7 @@ export default (time, current) => {
 
   const diff = time - current;
 
-  if (diff < 0 || diff > day * 6)
+  if (diff < hour * -6 || diff > day * 6)
     return {
       time: displayTime,
       date:
@@ -30,6 +39,6 @@ export default (time, current) => {
 
   return {
     time: displayTime,
-    date: null
+    date: today
   };
 };
