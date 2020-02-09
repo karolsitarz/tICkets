@@ -94,6 +94,7 @@ const ScrollInput = ({
       );
       const start = el[accessor.offset];
       const size = el[accessor.size];
+      el.style.setProperty('--h', el.offsetHeight + 'px');
 
       temp.push({
         start: start - margin,

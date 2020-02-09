@@ -26,7 +26,7 @@ const Container = styled.div`
 `;
 
 const Titles = styled.div`
-  margin: 3em;
+  margin: 2em;
 `;
 
 const App = () => {

@@ -7,7 +7,7 @@ import pdfExtract from '../util/pdfExtract';
 
 const Label = styled.label`
   align-self: center;
-  margin: 3em 0;
+  margin: 2em 0;
   > input {
     display: none;
   }

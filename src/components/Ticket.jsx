@@ -5,13 +5,17 @@ import { useSelector } from 'react-redux';
 
 import timeStrings from '../util/timeStrings';
 import drawQrOnCanvas from '../util/qrCode';
+import { TrainFrontIcon, TrainSideIcon, SeatIcon } from './Icons';
+import TicketBg from './TicketBg';
 
 const TicketContainer = styled.div`
-  width: 275px;
+  width: 15em;
   height: 100%;
-  max-height: 400px;
+  max-height: 25em;
   margin: 0 3vw;
   pointer-events: auto;
+
+  filter: drop-shadow(0 1em 2em #00000040);
 `;
 
 const TicketBackside = styled.div`
@@ -21,20 +25,18 @@ const TicketBackside = styled.div`
   left: 0;
   top: 0;
   right: 0;
-  border-radius: 2em;
-  background-image: linear-gradient(to bottom right, #b26eca, #ffcf96);
+  /* border-radius: 2em; */
+  /* background-image: linear-gradient(to bottom right, #b26eca, #ffcf96); */
   transition: transform 0.25s ease;
   transform: ${({ _flipped }) =>
     _flipped ? 'rotateX(-180deg)' : 'rotateX(0)'};
   backface-visibility: hidden;
-  box-shadow: 0 1em 2em #00000040;
 `;
 
 const TicketContent = styled(TicketBackside)`
   display: flex;
   flex-direction: column;
   padding: 2.5em 1.5em;
-  font-weight: 600;
   color: white;
   transform: ${({ _flipped }) => (_flipped ? 'rotateX(180deg)' : 'rotateX(0)')};
 `;
@@ -64,17 +66,41 @@ const QrCanvas = styled.canvas`
 `;
 
 const Date = styled.span`
-  font-size: 40px;
+  font-size: 1.75em;
   opacity: 0.8;
+  font-weight: 600;
 `;
 
 const City = styled.span`
-  font-size: 24px;
+  font-size: 1.25em;
+  font-weight: 600;
 `;
 
 const Time = styled.span`
-  font-size: 18px;
+  font-size: 1em;
   opacity: 0.8;
+`;
+
+const BottomInfo = styled.div`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextWithIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  > svg {
+    margin-right: 0.25em;
+    height: 0.8em;
+    width: 1em;
+  }
+`;
+
+const CarSeatInfo = styled.div`
+  > ${TextWithIcon}:first-of-type {
+    margin-right: 0.75em;
+  }
 `;
 
 const Ticket = ({ journeys, code }) => {
@@ -101,16 +127,31 @@ const Ticket = ({ journeys, code }) => {
   return (
     <TicketContainer onClick={onClickHandle}>
       <TicketContent _flipped={isFlipped}>
+        <TicketBg />
         <Date>{originTime.date}</Date>
         <City>{journeys[0].destination.place}</City>
         <Time>{destinationTime.time}</Time>
         <City>{journeys[0].origin.place}</City>
         <Time>{originTime.time}</Time>
-        <span>{journeys[0].train.id}</span>
-        <span>{journeys[0].train.car}</span>
-        <span>{journeys[0].train.seat}</span>
+        <BottomInfo>
+          <TextWithIcon>
+            <TrainFrontIcon />
+            {journeys[0].train.id}
+          </TextWithIcon>
+          <CarSeatInfo>
+            <TextWithIcon>
+              <TrainSideIcon />
+              {journeys[0].train.car}
+            </TextWithIcon>
+            <TextWithIcon>
+              <SeatIcon />
+              {journeys[0].train.seat}
+            </TextWithIcon>
+          </CarSeatInfo>
+        </BottomInfo>
       </TicketContent>
       <TicketBackside _flipped={!isFlipped}>
+        <TicketBg />
         <QrContainer _flipped={!isFlipped}>
           <QrCanvas ref={canvas} />
         </QrContainer>
