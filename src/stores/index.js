@@ -17,6 +17,6 @@ const reducer = combineReducers({
 
 export default createStore(
   reducer,
-  load(LS_CONFIG),
+  load({ ...LS_CONFIG, disableWarnings: true }),
   composeWithDevTools(applyMiddleware(save(LS_CONFIG)))
 );

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
@@ -8,6 +8,12 @@ import drawQrOnCanvas from '../util/qrCode';
 import { TrainFrontIcon, TrainSideIcon, SeatIcon } from './Icons';
 import polygonCircle from '../util/polygonCircle';
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+`;
+
 const TicketContainer = styled.div`
   width: 15em;
   height: 100%;
@@ -15,6 +21,7 @@ const TicketContainer = styled.div`
   margin: 0 3vw;
   pointer-events: auto;
   filter: drop-shadow(0 1em 2em #00000040);
+  animation: ${fadeIn} 0.5s ease backwards;
 `;
 
 const TicketBackside = styled.div`
@@ -25,25 +32,16 @@ const TicketBackside = styled.div`
   top: 0;
   right: 0;
   border-radius: 2em;
-  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
-  transition: transform 0.25s ease;
+  background-image: linear-gradient(to bottom left, #db40f7, #ffcb3f);
+  transition: transform 0.35s ease;
   transform: ${({ _flipped }) =>
-    _flipped ? 'rotateX(-180deg)' : 'rotateX(0)'};
+    _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
   backface-visibility: hidden;
-`;
-
-const TicketContent = styled(TicketBackside)`
-  display: flex;
-  flex-direction: column;
-  padding: 2.5em 1.5em;
-  color: white;
-  transform: ${({ _flipped }) => (_flipped ? 'rotateX(180deg)' : 'rotateX(0)')};
-  border-radius: 2em;
-  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
   clip-path: ${`polygon(
     0 0,
     ${polygonCircle(2, 5).reduce(
-      (acc, { x, y }) => (acc += `calc(50% + ${x.toFixed(3)}em) ${y.toFixed(3)}em,`),
+      (acc, { x, y }) =>
+        (acc += `calc(50% + ${x.toFixed(3)}em) ${y.toFixed(3)}em,`),
       ''
     )}
     100% 0,
@@ -61,14 +59,21 @@ const TicketContent = styled(TicketBackside)`
   )`};
 `;
 
+const TicketContent = styled(TicketBackside)`
+  display: flex;
+  flex-direction: column;
+  padding: 2.5em 1.5em;
+  color: white;
+  transform: ${({ _flipped }) => (_flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
+  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
+`;
+
 const QrContainer = styled.div`
   width: 100%;
   top: 50%;
   transform: translateY(-50%);
   border-radius: 2em;
   background-color: #fff;
-  transition: opacity 0.25s ease;
-  opacity: ${({ _flipped }) => (_flipped ? 0 : 1)};
 
   &::after {
     content: '';
@@ -170,7 +175,7 @@ const Ticket = ({ journeys, code }) => {
         </BottomInfo>
       </TicketContent>
       <TicketBackside _flipped={!isFlipped}>
-        <QrContainer _flipped={!isFlipped}>
+        <QrContainer>
           <QrCanvas ref={canvas} />
         </QrContainer>
       </TicketBackside>

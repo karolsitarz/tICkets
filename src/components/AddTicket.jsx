@@ -35,7 +35,7 @@ const AddTicket = () => {
   };
   return (
     <Label>
-      <Button>New ticket</Button>
+      <Button>Add a ticket</Button>
       <input type="file" accept="application/pdf" onChange={handleChange} />
     </Label>
   );
