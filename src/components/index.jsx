@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import TicketList from './TicketList';
 import AddTicket from './AddTicket';
-import { TicketGradient } from './TicketBg';
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +32,6 @@ const Titles = styled.div`
 const App = () => {
   return (
     <>
-      <TicketGradient />
       <Container>
         <Titles>
           <h1>Hello, there! 👋</h1>

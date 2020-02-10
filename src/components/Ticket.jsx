@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import timeStrings from '../util/timeStrings';
 import drawQrOnCanvas from '../util/qrCode';
 import { TrainFrontIcon, TrainSideIcon, SeatIcon } from './Icons';
-import TicketBg from './TicketBg';
+import polygonCircle from '../util/polygonCircle';
 
 const TicketContainer = styled.div`
   width: 15em;
@@ -14,7 +14,6 @@ const TicketContainer = styled.div`
   max-height: 25em;
   margin: 0 3vw;
   pointer-events: auto;
-
   filter: drop-shadow(0 1em 2em #00000040);
 `;
 
@@ -25,8 +24,8 @@ const TicketBackside = styled.div`
   left: 0;
   top: 0;
   right: 0;
-  /* border-radius: 2em; */
-  /* background-image: linear-gradient(to bottom right, #b26eca, #ffcf96); */
+  border-radius: 2em;
+  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
   transition: transform 0.25s ease;
   transform: ${({ _flipped }) =>
     _flipped ? 'rotateX(-180deg)' : 'rotateX(0)'};
@@ -39,6 +38,27 @@ const TicketContent = styled(TicketBackside)`
   padding: 2.5em 1.5em;
   color: white;
   transform: ${({ _flipped }) => (_flipped ? 'rotateX(180deg)' : 'rotateX(0)')};
+  border-radius: 2em;
+  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
+  clip-path: ${`polygon(
+    0 0,
+    ${polygonCircle(2, 5).reduce(
+      (acc, { x, y }) => (acc += `calc(50% + ${x.toFixed(3)}em) ${y.toFixed(3)}em,`),
+      ''
+    )}
+    100% 0,
+    100% 100%,
+    ${polygonCircle(2, 5)
+      .reverse()
+      .reduce(
+        (acc, { x, y }) =>
+          (acc += `calc(50% + ${x.toFixed(3)}em) calc(100% - ${y.toFixed(
+            3
+          )}em),`),
+        ''
+      )}
+    0 100%
+  )`};
 `;
 
 const QrContainer = styled.div`
@@ -127,7 +147,6 @@ const Ticket = ({ journeys, code }) => {
   return (
     <TicketContainer onClick={onClickHandle}>
       <TicketContent _flipped={isFlipped}>
-        <TicketBg />
         <Date>{originTime.date}</Date>
         <City>{journeys[0].destination.place}</City>
         <Time>{destinationTime.time}</Time>
@@ -151,7 +170,6 @@ const Ticket = ({ journeys, code }) => {
         </BottomInfo>
       </TicketContent>
       <TicketBackside _flipped={!isFlipped}>
-        <TicketBg />
         <QrContainer _flipped={!isFlipped}>
           <QrCanvas ref={canvas} />
         </QrContainer>
