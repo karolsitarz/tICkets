@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,6 @@ const TicketBackside = styled.div`
   transition: transform 0.35s ease;
   transform: ${({ _flipped }) =>
     _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
-  backface-visibility: hidden;
   clip-path: ${`polygon(
     0 0,
     ${polygonCircle(2, 5).reduce(
@@ -66,6 +65,7 @@ const TicketContent = styled(TicketBackside)`
   color: white;
   transform: ${({ _flipped }) => (_flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
   background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
+  backface-visibility: hidden;
 `;
 
 const QrContainer = styled.div`
@@ -130,27 +130,37 @@ const CarSeatInfo = styled.div`
 
 const Ticket = ({ journeys, code }) => {
   const [isFlipped, setFlipped] = useState(false);
+  const [isFirstFlip, setFirstFlip] = useState(false);
   const canvas = useRef(null);
   const time = useSelector(store => store.time);
   const originTime = timeStrings(journeys[0].origin.time, time);
   const destinationTime = timeStrings(journeys[0].destination.time, time);
-  const onClickHandle = e => {
+
+  const onClickHandle = useCallback(() => {
     if (isFlipped) return;
 
     setFlipped(true);
+    if (!isFirstFlip) setFirstFlip(true);
     document.addEventListener('click', outClick);
-  };
+  }, [isFlipped]);
+
   const outClick = () => {
     setFlipped(false);
     document.removeEventListener('click', outClick);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (!isFirstFlip) return;
     drawQrOnCanvas(code, canvas.current);
-  });
+  }, [isFirstFlip]);
 
   return (
     <TicketContainer onClick={onClickHandle}>
+      <TicketBackside _flipped={!isFlipped}>
+        <QrContainer>
+          <QrCanvas ref={canvas} />
+        </QrContainer>
+      </TicketBackside>
       <TicketContent _flipped={isFlipped}>
         <Date>{originTime.date}</Date>
         <City>{journeys[0].destination.place}</City>
@@ -174,11 +184,6 @@ const Ticket = ({ journeys, code }) => {
           </CarSeatInfo>
         </BottomInfo>
       </TicketContent>
-      <TicketBackside _flipped={!isFlipped}>
-        <QrContainer>
-          <QrCanvas ref={canvas} />
-        </QrContainer>
-      </TicketBackside>
     </TicketContainer>
   );
 };

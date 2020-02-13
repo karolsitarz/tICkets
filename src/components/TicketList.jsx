@@ -14,14 +14,16 @@ const TicketScrollContainer = styled.div`
 `;
 
 const TicketList = () => {
-  const tickets = useSelector(store => store.tickets);
+  const tickets = useSelector(({ tickets }) =>
+    tickets.sort(
+      (a, b) => b.journeys[0].origin.time - a.journeys[0].origin.time
+    )
+  );
   return (
     <ScrollInput parent={TicketScrollContainer} horizontal>
-      {tickets
-        .sort((a, b) => b.journeys[0].origin.time - a.journeys[0].origin.time)
-        .map(({ id, code, journeys }) => (
-          <Ticket key={id} code={code} journeys={journeys} />
-        ))}
+      {tickets.map(({ id, code, journeys }) => (
+        <Ticket key={id} code={code} journeys={journeys} />
+      ))}
     </ScrollInput>
   );
 };

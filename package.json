@@ -33,7 +33,6 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
-    "@glidejs/glide": "^3.4.1",
     "pdfjs-dist": "^2.2.228",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
@@ -41,7 +40,7 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-localstorage-simple": "^2.1.6",
-    "styled-components": "^4.4.0"
+    "styled-components": "4.4.0"
   },
   "description": ""
 }
