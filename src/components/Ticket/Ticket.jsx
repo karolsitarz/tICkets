@@ -108,7 +108,7 @@ const Ticket = ({ journeys, code }) => {
       return 0;
     })()
   );
-  const disabled = journeys[journeys.length - 1].destination.time - day < time;
+  const disabled = journeys[journeys.length - 1].destination.time + day < time;
 
   const canvas = useRef(null);
 
