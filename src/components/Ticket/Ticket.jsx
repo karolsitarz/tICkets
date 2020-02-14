@@ -137,6 +137,8 @@ const Ticket = ({ journeys, code }) => {
             active={i === activeJourney}
             key={el.origin.time}
             journey={el}
+            isFirst={i === 0}
+            isLast={i === journeys.length - 1}
           />
         ))}
       </TicketContentContainer>

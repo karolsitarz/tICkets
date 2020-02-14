@@ -1,16 +1,15 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 const hour = 1000 * 60 * 60;
 const day = hour * 24;
 const weekDays = [
+  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
-  'Saturday',
-  'Sunday'
+  'Saturday'
 ];
 const today = 'Today';
 const writeWith0 = val => (val < 10 ? `0${val}` : val);

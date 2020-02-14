@@ -44,7 +44,7 @@ const JourneySwitcher = ({ left, right, onClick, hidden }) => {
     e.stopPropagation();
     onClick(1);
   });
-
+  // TODO: ADD ICONS
   return (
     <>
       <LeftButton onClick={subtract} _visible={left && !hidden}>

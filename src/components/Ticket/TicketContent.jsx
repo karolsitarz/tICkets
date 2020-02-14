@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import useTimeStrings from '../../hooks/useTimeStrings';
-import { TrainFrontIcon, TrainSideIcon, SeatIcon } from '../Icons';
+import {
+  TrainFrontIcon,
+  TrainSideIcon,
+  SeatIcon,
+  LocationIcon
+} from '../Icons';
 
 const StyledTicketContent = styled.div`
   position: absolute;
@@ -58,17 +64,49 @@ const CarSeatInfo = styled.div`
   }
 `;
 
-const TicketContent = ({ journey, active }) => {
+const Location = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5em;
+  margin: 0.25em 0;
+`;
+const LocationIconContainer = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 1.75em;
+  left: 0;
+  top: 0;
+  transform: translateX(-33%);
+`;
+
+const TicketContent = ({ journey, active, isFirst, isLast }) => {
   const originTime = useTimeStrings(journey.origin.time);
   const destinationTime = useTimeStrings(journey.destination.time);
-
+  const time = useSelector(({ time }) => time);
+  // TODO: UPDATE ICONS
   return (
     <StyledTicketContent _active={active}>
       <Date>{originTime.date}</Date>
-      <City>{journey.destination.place}</City>
-      <Time>{destinationTime.time}</Time>
-      <City>{journey.origin.place}</City>
-      <Time>{originTime.time}</Time>
+      <Location>
+        <City>{journey.destination.place}</City>
+        <Time>{destinationTime.time}</Time>
+        <LocationIconContainer>
+          <LocationIcon
+            isCurrent={journey.destination.time < time}
+            isLast={isLast}
+          />
+        </LocationIconContainer>
+      </Location>
+      <Location>
+        <City>{journey.origin.place}</City>
+        <Time>{originTime.time}</Time>
+        <LocationIconContainer>
+          <LocationIcon
+            isCurrent={journey.origin.time < time}
+            isFirst={isFirst}
+          />
+        </LocationIconContainer>
+      </Location>
       <BottomInfo>
         <TextWithIcon>
           <TrainFrontIcon />
@@ -106,7 +144,9 @@ TicketContent.propTypes = {
       seat: PropTypes.string
     })
   }),
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  isFirst: PropTypes.bool,
+  isLast: PropTypes.bool
 };
 
 export default TicketContent;
