@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import useTimeStrings from '../../hooks/useTimeStrings';
+import { hour } from '../../util/timeConst';
 import {
   TrainFrontIcon,
   TrainSideIcon,
@@ -102,7 +103,7 @@ const TicketContent = ({ journey, active, isFirst, isLast }) => {
         <Time>{originTime.time}</Time>
         <LocationIconContainer>
           <LocationIcon
-            isCurrent={journey.origin.time < time}
+            isCurrent={journey.origin.time - hour * 12 < time}
             isFirst={isFirst}
           />
         </LocationIconContainer>

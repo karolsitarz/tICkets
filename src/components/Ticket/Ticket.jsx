@@ -7,6 +7,7 @@ import drawQrOnCanvas from '../../util/qrCode';
 import polygonCircle from '../../util/polygonCircle';
 import TicketContent from './TicketContent';
 import JourneySwitcher from './JourneySwitcher';
+import { day } from '../../util/timeConst';
 
 const fadeIn = keyframes`
   from {
@@ -56,14 +57,20 @@ const TicketSide = styled.div`
 `;
 
 const TicketBackside = styled(TicketSide)`
-  background-image: linear-gradient(to bottom left, #db40f7, #ffcb3f);
+  background-image: ${({ _disabled }) =>
+    _disabled
+      ? `linear-gradient(to bottom left, #5b4568,#9fb2d6)`
+      : `linear-gradient(to bottom left, #6c00ae, #76a5ff)`};
   transform: ${({ _flipped }) =>
     _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
 `;
 
 const TicketContentContainer = styled(TicketSide)`
   transform: ${({ _flipped }) => (_flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
-  background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
+  background-image: ${({ _disabled }) =>
+    _disabled
+      ? `linear-gradient(to bottom right, #5b4568,#9fb2d6)`
+      : `linear-gradient(to bottom right, #6c00ae, #76a5ff)`};
   backface-visibility: hidden;
 `;
 
@@ -92,12 +99,15 @@ const QrCanvas = styled.canvas`
 const Ticket = ({ journeys, code }) => {
   const [isFlipped, setFlipped] = useState(false);
   const [isFirstFlip, setFirstFlip] = useState(false);
-  const defaultJourney = useSelector(({ time }) => {
-    for (let i = journeys.length - 1; i >= 0; i--)
-      if (journeys[i].origin.time < time) return i;
-    return 0;
-  });
-  const [activeJourney, setActiveJourney] = useState(defaultJourney);
+  const time = useSelector(({ time }) => time);
+  const [activeJourney, setActiveJourney] = useState(
+    (() => {
+      for (let i = journeys.length - 1; i >= 0; i--)
+        if (journeys[i].origin.time < time) return i;
+      return 0;
+    })()
+  );
+  const disabled = journeys[journeys.length - 1].destination.time - day < time;
 
   const canvas = useRef(null);
 
@@ -126,12 +136,12 @@ const Ticket = ({ journeys, code }) => {
 
   return (
     <TicketContainer onClick={onClickHandle}>
-      <TicketBackside _flipped={!isFlipped}>
+      <TicketBackside _disabled={disabled} _flipped={!isFlipped}>
         <QrContainer>
           <QrCanvas ref={canvas} />
         </QrContainer>
       </TicketBackside>
-      <TicketContentContainer _flipped={isFlipped}>
+      <TicketContentContainer _disabled={disabled} _flipped={isFlipped}>
         {journeys.map((el, i) => (
           <TicketContent
             active={i === activeJourney}
