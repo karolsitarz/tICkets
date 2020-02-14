@@ -1,6 +1,8 @@
-export const hour = 1000 * 60 * 60;
-export const day = hour * 24;
+import React from 'react';
+import { useSelector } from 'react-redux';
 
+const hour = 1000 * 60 * 60;
+const day = hour * 24;
 const weekDays = [
   'Monday',
   'Tuesday',
@@ -11,16 +13,14 @@ const weekDays = [
   'Sunday'
 ];
 const today = 'Today';
-
 const writeWith0 = val => (val < 10 ? `0${val}` : val);
 
-export default (time, current) => {
+const useTimeStrings = time => {
   const timeObj = new Date(time);
+  const diff = useSelector(state => time - state.time);
 
   const displayTime =
     writeWith0(timeObj.getHours()) + ':' + writeWith0(timeObj.getMinutes());
-
-  const diff = time - current;
 
   if (diff < hour * -6 || diff > day * 6)
     return {
@@ -42,3 +42,5 @@ export default (time, current) => {
     date: today
   };
 };
+
+export default useTimeStrings;

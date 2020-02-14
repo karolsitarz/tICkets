@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import TicketList from './TicketList';
+import TicketList from './Ticket/TicketList';
 import AddTicket from './AddTicket';
 
 const Container = styled.div`

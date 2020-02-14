@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import Ticket from './Ticket';
-import ScrollInput from './ScrollInput';
+import ScrollInput from '../ScrollInput';
 
 const TicketScrollContainer = styled.div`
   display: flex;
@@ -14,11 +14,12 @@ const TicketScrollContainer = styled.div`
 `;
 
 const TicketList = () => {
-  const tickets = useSelector(({ tickets }) =>
-    tickets.sort(
+  const { tickets, time } = useSelector(({ tickets, time }) => ({
+    time,
+    tickets: tickets.sort(
       (a, b) => b.journeys[0].origin.time - a.journeys[0].origin.time
     )
-  );
+  }));
   return (
     <ScrollInput parent={TicketScrollContainer} horizontal>
       {tickets.map(({ id, code, journeys }) => (

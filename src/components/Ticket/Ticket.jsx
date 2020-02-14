@@ -3,10 +3,10 @@ import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import timeStrings from '../util/timeStrings';
-import drawQrOnCanvas from '../util/qrCode';
-import { TrainFrontIcon, TrainSideIcon, SeatIcon } from './Icons';
-import polygonCircle from '../util/polygonCircle';
+import drawQrOnCanvas from '../../util/qrCode';
+import polygonCircle from '../../util/polygonCircle';
+import TicketContent from './TicketContent';
+import JourneySwitcher from './JourneySwitcher';
 
 const fadeIn = keyframes`
   from {
@@ -24,7 +24,7 @@ const TicketContainer = styled.div`
   animation: ${fadeIn} 0.5s ease backwards;
 `;
 
-const TicketBackside = styled.div`
+const TicketSide = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -32,10 +32,7 @@ const TicketBackside = styled.div`
   top: 0;
   right: 0;
   border-radius: 2em;
-  background-image: linear-gradient(to bottom left, #db40f7, #ffcb3f);
   transition: transform 0.35s ease;
-  transform: ${({ _flipped }) =>
-    _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
   clip-path: ${`polygon(
     0 0,
     ${polygonCircle(2, 5).reduce(
@@ -58,11 +55,13 @@ const TicketBackside = styled.div`
   )`};
 `;
 
-const TicketContent = styled(TicketBackside)`
-  display: flex;
-  flex-direction: column;
-  padding: 2.5em 1.5em;
-  color: white;
+const TicketBackside = styled(TicketSide)`
+  background-image: linear-gradient(to bottom left, #db40f7, #ffcb3f);
+  transform: ${({ _flipped }) =>
+    _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
+`;
+
+const TicketContentContainer = styled(TicketSide)`
   transform: ${({ _flipped }) => (_flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
   background-image: linear-gradient(to bottom right, #db40f7, #ffcb3f);
   backface-visibility: hidden;
@@ -90,51 +89,17 @@ const QrCanvas = styled.canvas`
   left: 10%;
 `;
 
-const Date = styled.span`
-  font-size: 1.75em;
-  opacity: 0.8;
-  font-weight: 600;
-`;
-
-const City = styled.span`
-  font-size: 1.25em;
-  font-weight: 600;
-`;
-
-const Time = styled.span`
-  font-size: 1em;
-  opacity: 0.8;
-`;
-
-const BottomInfo = styled.div`
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-`;
-
-const TextWithIcon = styled.span`
-  display: inline-flex;
-  align-items: center;
-  > svg {
-    margin-right: 0.25em;
-    height: 0.8em;
-    width: 1em;
-  }
-`;
-
-const CarSeatInfo = styled.div`
-  > ${TextWithIcon}:first-of-type {
-    margin-right: 0.75em;
-  }
-`;
-
 const Ticket = ({ journeys, code }) => {
   const [isFlipped, setFlipped] = useState(false);
   const [isFirstFlip, setFirstFlip] = useState(false);
+  const defaultJourney = useSelector(({ time }) => {
+    for (let i = journeys.length - 1; i >= 0; i--)
+      if (journeys[i].origin.time < time) return i;
+    return 0;
+  });
+  const [activeJourney, setActiveJourney] = useState(defaultJourney);
+
   const canvas = useRef(null);
-  const time = useSelector(store => store.time);
-  const originTime = timeStrings(journeys[0].origin.time, time);
-  const destinationTime = timeStrings(journeys[0].destination.time, time);
 
   const onClickHandle = useCallback(() => {
     if (isFlipped) return;
@@ -154,6 +119,11 @@ const Ticket = ({ journeys, code }) => {
     drawQrOnCanvas(code, canvas.current);
   }, [isFirstFlip]);
 
+  const buttonClick = useCallback(step => {
+    if (isFlipped) return;
+    setActiveJourney(activeJourney + step);
+  });
+
   return (
     <TicketContainer onClick={onClickHandle}>
       <TicketBackside _flipped={!isFlipped}>
@@ -161,29 +131,21 @@ const Ticket = ({ journeys, code }) => {
           <QrCanvas ref={canvas} />
         </QrContainer>
       </TicketBackside>
-      <TicketContent _flipped={isFlipped}>
-        <Date>{originTime.date}</Date>
-        <City>{journeys[0].destination.place}</City>
-        <Time>{destinationTime.time}</Time>
-        <City>{journeys[0].origin.place}</City>
-        <Time>{originTime.time}</Time>
-        <BottomInfo>
-          <TextWithIcon>
-            <TrainFrontIcon />
-            {journeys[0].train.id}
-          </TextWithIcon>
-          <CarSeatInfo>
-            <TextWithIcon>
-              <TrainSideIcon />
-              {journeys[0].train.car}
-            </TextWithIcon>
-            <TextWithIcon>
-              <SeatIcon />
-              {journeys[0].train.seat}
-            </TextWithIcon>
-          </CarSeatInfo>
-        </BottomInfo>
-      </TicketContent>
+      <TicketContentContainer _flipped={isFlipped}>
+        {journeys.map((el, i) => (
+          <TicketContent
+            active={i === activeJourney}
+            key={el.origin.time}
+            journey={el}
+          />
+        ))}
+      </TicketContentContainer>
+      <JourneySwitcher
+        left={activeJourney != 0}
+        right={activeJourney != journeys.length - 1}
+        onClick={buttonClick}
+        hidden={isFlipped}
+      />
     </TicketContainer>
   );
 };
