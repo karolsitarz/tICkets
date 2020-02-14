@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { ArrowRightIcon, ArrowLeftIcon } from '../Icons';
 
 const JourneyButton = styled.div`
   position: absolute;
@@ -15,6 +15,7 @@ const JourneyButton = styled.div`
   align-items: center;
   cursor: pointer;
   transition: opacity 0.25s ease;
+  background: #0002;
   ${({ _visible }) =>
     !_visible &&
     css`
@@ -22,6 +23,9 @@ const JourneyButton = styled.div`
       cursor: auto;
       pointer-events: none;
     `}
+  > svg {
+    height: 1em;
+  }
 `;
 
 const LeftButton = styled(JourneyButton)`
@@ -44,14 +48,13 @@ const JourneySwitcher = ({ left, right, onClick, hidden }) => {
     e.stopPropagation();
     onClick(1);
   });
-  // TODO: ADD ICONS
   return (
     <>
       <LeftButton onClick={subtract} _visible={left && !hidden}>
-        &lt;
+        <ArrowLeftIcon />
       </LeftButton>
       <RightButton onClick={add} _visible={right && !hidden}>
-        &gt;
+        <ArrowRightIcon />
       </RightButton>
     </>
   );

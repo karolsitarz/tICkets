@@ -34,6 +34,7 @@ const TicketSide = styled.div`
   right: 0;
   border-radius: 2em;
   transition: transform 0.35s ease;
+  overflow: hidden;
   clip-path: ${`polygon(
     0 0,
     ${polygonCircle(2, 5).reduce(
@@ -151,13 +152,13 @@ const Ticket = ({ journeys, code }) => {
             isLast={i === journeys.length - 1}
           />
         ))}
+        <JourneySwitcher
+          left={activeJourney != 0}
+          right={activeJourney != journeys.length - 1}
+          onClick={buttonClick}
+          hidden={isFlipped}
+        />
       </TicketContentContainer>
-      <JourneySwitcher
-        left={activeJourney != 0}
-        right={activeJourney != journeys.length - 1}
-        onClick={buttonClick}
-        hidden={isFlipped}
-      />
     </TicketContainer>
   );
 };

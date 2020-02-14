@@ -84,7 +84,6 @@ const TicketContent = ({ journey, active, isFirst, isLast }) => {
   const originTime = useTimeStrings(journey.origin.time);
   const destinationTime = useTimeStrings(journey.destination.time);
   const time = useSelector(({ time }) => time);
-  // TODO: UPDATE ICONS
   return (
     <StyledTicketContent _active={active}>
       <Date>{originTime.date}</Date>
