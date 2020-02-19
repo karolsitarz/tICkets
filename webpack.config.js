@@ -10,7 +10,8 @@ module.exports = (env, argv) => {
     target: 'web',
     entry: './src/index',
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx'],
+      modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
     module: {
       rules: [

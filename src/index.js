@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import store from './stores';
-import GlobalStyles from './style/global-styles';
-import App from './components';
+import store from 'stores';
+import GlobalStyles from 'style/global-styles';
+import App from 'components';
 
 ReactDOM.render(
   <>

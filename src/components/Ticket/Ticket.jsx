@@ -3,11 +3,11 @@ import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import drawQrOnCanvas from '../../util/qrCode';
-import polygonCircle from '../../util/polygonCircle';
 import TicketContent from './TicketContent';
 import JourneySwitcher from './JourneySwitcher';
-import { day } from '../../util/timeConst';
+import drawQrOnCanvas from 'util/qrCode';
+import polygonCircle from 'util/polygonCircle';
+import { day } from 'util/timeConst';
 
 const fadeIn = keyframes`
   from {

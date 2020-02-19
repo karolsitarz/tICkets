@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
-import { ArrowRightIcon, ArrowLeftIcon } from '../Icons';
+import { ArrowRightIcon, ArrowLeftIcon } from 'components/Icons';
 
 const JourneyButton = styled.div`
   position: absolute;

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { ticketActions } from '../stores/tickets';
+import { ticketActions } from 'stores/tickets';
 
-import pdfExtract from '../util/pdfExtract';
+import pdfExtract from 'util/pdfExtract';
 
 const Label = styled.label`
   align-self: center;

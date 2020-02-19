@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { hour, day, weekDays, today, writeWith0 } from '../util/timeConst';
+import { hour, day, weekDays, today, writeWith0 } from 'util/timeConst';
 
 const useTimeStrings = time => {
   const timeObj = new Date(time);

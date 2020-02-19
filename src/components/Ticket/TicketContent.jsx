@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import useTimeStrings from '../../hooks/useTimeStrings';
-import { hour } from '../../util/timeConst';
+import useTimeStrings from 'hooks/useTimeStrings';
+import { hour } from 'util/timeConst';
 import {
   TrainFrontIcon,
   TrainSideIcon,

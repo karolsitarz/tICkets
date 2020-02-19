@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import Ticket from './Ticket';
-import ScrollInput from '../ScrollInput';
+import ScrollInput from 'components/ScrollInput';
 
 const TicketScrollContainer = styled.div`
   display: flex;
