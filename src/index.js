@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import store from 'stores';
 import GlobalStyles from 'style/global-styles';
 import App from 'components';
+import enableServiceWorker from 'util/serviceWorker';
 
 ReactDOM.render(
   <>
@@ -16,8 +17,4 @@ ReactDOM.render(
   document.getElementById('container')
 );
 
-(function() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js');
-  }
-})();
+enableServiceWorker();

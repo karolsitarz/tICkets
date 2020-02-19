@@ -29,7 +29,6 @@ const AddTicket = () => {
   const handleChange = async e => {
     try {
       const data = await pdfExtract(e);
-      console.log(data);
       dispatch(ticketActions.addTicket(data));
     } catch (e) {}
   };
