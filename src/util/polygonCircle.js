@@ -9,8 +9,8 @@ const polygonCircle = (size, steps) => {
     const n =
       Math.abs((parseInt(i / steps) % 2) * (steps - 1) - (i % steps)) + 1;
     progress += n;
-    const x = -size + step * progress;
-    const y = Math.sqrt(size ** 2 - x ** 2);
+    const x = (-size + step * progress).toFixed(3);
+    const y = Math.sqrt(size ** 2 - x ** 2).toFixed(3);
     data[i] = { x, y };
   }
   return [{ x: -size, y: 0 }, ...data];

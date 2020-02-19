@@ -37,20 +37,16 @@ const TicketSide = styled.div`
   overflow: hidden;
   clip-path: ${`polygon(
     0 0,
-    ${polygonCircle(2, 5).reduce(
-      (acc, { x, y }) =>
-        (acc += `calc(50% + ${x.toFixed(3)}em) ${y.toFixed(3)}em,`),
+    ${polygonCircle(2, 4).reduce(
+      (acc, { x, y }) => (acc += `calc(50% + ${x}em) ${y}em,`),
       ''
     )}
     100% 0,
     100% 100%,
-    ${polygonCircle(2, 5)
+    ${polygonCircle(2, 4)
       .reverse()
       .reduce(
-        (acc, { x, y }) =>
-          (acc += `calc(50% + ${x.toFixed(3)}em) calc(100% - ${y.toFixed(
-            3
-          )}em),`),
+        (acc, { x, y }) => (acc += `calc(50% + ${x}em) calc(100% - ${y}em),`),
         ''
       )}
     0 100%
@@ -98,8 +94,8 @@ const QrCanvas = styled.canvas`
 `;
 
 const Ticket = ({ journeys, code }) => {
-  const [isFlipped, setFlipped] = useState(false);
   const time = useSelector(({ time }) => time);
+  const [isFlipped, setFlipped] = useState(false);
   const [activeJourney, setActiveJourney] = useState(
     (() => {
       for (let i = journeys.length - 1; i >= 0; i--)
@@ -147,12 +143,14 @@ const Ticket = ({ journeys, code }) => {
             isLast={i === journeys.length - 1}
           />
         ))}
-        <JourneySwitcher
-          left={activeJourney != 0}
-          right={activeJourney != journeys.length - 1}
-          onClick={buttonClick}
-          hidden={isFlipped}
-        />
+        {journeys.length > 1 && (
+          <JourneySwitcher
+            left={activeJourney != 0}
+            right={activeJourney != journeys.length - 1}
+            onClick={buttonClick}
+            hidden={isFlipped}
+          />
+        )}
       </TicketContentContainer>
     </TicketContainer>
   );
