@@ -1,5 +1,19 @@
 import { getDocument } from 'pdfjs-dist/webpack';
-import { getCodeArray } from 'hooks/useQrCode';
+
+const RGB = 3;
+const pxSize = 2;
+
+const getCodeArray = data => {
+  const temp = [];
+  const qrSize = Math.sqrt(data.length / RGB) / pxSize;
+
+  for (let i = 0; i < qrSize; i++)
+    for (let j = 0; j < qrSize; j++)
+      temp[i * qrSize + j] =
+        data[(i * qrSize * pxSize + j) * RGB * pxSize] === 0 ? true : false;
+
+  return temp;
+};
 
 const convertDateToMs = (date, time, buyDate) => {
   const [d, m] = date.split('.');
@@ -47,7 +61,7 @@ const mapData = data => {
 
 const getTicketId = data => {
   const i = data.findIndex(el => el === 'Nr biletu');
-  if (indexedDB < 0) {
+  if (i < 0) {
     throw new Error(`Could not find ticket ID.`);
   }
   return data[i + 1].substr(2);
@@ -75,18 +89,16 @@ const readPDF = e =>
       }
       const page = await doc.getPage(1);
       const text = await page.getTextContent();
-
+      const items = text.items.map(el => el.str);
       await page.getOperatorList();
-      page.objs.get('img_p0_2', ({ data }) => {
-        const code = getCodeArray(data);
-        const items = text.items.map(el => el.str);
 
+      page.objs.get('img_p0_2', ({ data }) =>
         resolve({
-          code,
+          code: getCodeArray(data),
           id: getTicketId(items),
           journeys: mapData(items)
-        });
-      });
+        })
+      );
     };
   });
 

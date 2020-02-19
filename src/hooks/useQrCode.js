@@ -1,20 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const RGB = 3;
-const pxSize = 2;
 const scale = 4;
-
-export const getCodeArray = data => {
-  const temp = [];
-  const qrSize = Math.sqrt(data.length / RGB) / pxSize;
-
-  for (let i = 0; i < qrSize; i++)
-    for (let j = 0; j < qrSize; j++)
-      temp[i * qrSize + j] =
-        data[(i * qrSize * pxSize + j) * RGB * pxSize] === 0 ? true : false;
-
-  return temp;
-};
 
 const useDrawQrCode = (code, canvas) => {
   const [shouldBeRendered, setRendered] = useState(false);
