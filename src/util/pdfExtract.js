@@ -1,5 +1,5 @@
 import { getDocument } from 'pdfjs-dist/webpack';
-import { getCodeArray } from './qrCode';
+import { getCodeArray } from 'hooks/useQrCode';
 
 const convertDateToMs = (date, time, buyDate) => {
   const [d, m] = date.split('.');

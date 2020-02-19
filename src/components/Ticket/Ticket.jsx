@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 
 import TicketContent from './TicketContent';
 import JourneySwitcher from './JourneySwitcher';
-import drawQrOnCanvas from 'util/qrCode';
 import polygonCircle from 'util/polygonCircle';
 import { day } from 'util/timeConst';
+import useDrawQrCode from 'hooks/useQrCode';
 
 const fadeIn = keyframes`
   from {
@@ -99,7 +99,6 @@ const QrCanvas = styled.canvas`
 
 const Ticket = ({ journeys, code }) => {
   const [isFlipped, setFlipped] = useState(false);
-  const [isFirstFlip, setFirstFlip] = useState(false);
   const time = useSelector(({ time }) => time);
   const [activeJourney, setActiveJourney] = useState(
     (() => {
@@ -111,12 +110,13 @@ const Ticket = ({ journeys, code }) => {
   const disabled = journeys[journeys.length - 1].destination.time + day < time;
 
   const canvas = useRef(null);
+  const drawQrCode = useDrawQrCode(code, canvas.current);
 
   const onClickHandle = useCallback(() => {
     if (isFlipped) return;
 
     setFlipped(true);
-    if (!isFirstFlip) setFirstFlip(true);
+    drawQrCode();
     document.addEventListener('click', outClick);
   }, [isFlipped]);
 
@@ -124,11 +124,6 @@ const Ticket = ({ journeys, code }) => {
     setFlipped(false);
     document.removeEventListener('click', outClick);
   };
-
-  useEffect(() => {
-    if (!isFirstFlip) return;
-    drawQrOnCanvas(code, canvas.current);
-  }, [isFirstFlip]);
 
   const buttonClick = useCallback(step => {
     if (isFlipped) return;
