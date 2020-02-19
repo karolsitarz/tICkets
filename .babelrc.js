@@ -1,5 +1,4 @@
-module.exports = api => {
-  return {
+module.exports = api => ({
     presets: [
       "@babel/react",
       ["@babel/env", { modules: false }]
@@ -14,5 +13,4 @@ module.exports = api => {
         }
       ]
     ]
-  };
-};
+});

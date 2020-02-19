@@ -3,18 +3,18 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 
 import store from 'stores';
-import GlobalStyles from 'style/global-styles';
+import GlobalStyles from 'components/GlobalStyles';
 import App from 'components';
 import enableServiceWorker from 'util/serviceWorker';
 
-ReactDOM.render(
+const Main = () => (
   <>
     <GlobalStyles />
     <Provider store={store}>
       <App />
     </Provider>
-  </>,
-  document.getElementById('container')
+  </>
 );
 
+ReactDOM.render(<Main />, document.getElementById('container'));
 enableServiceWorker();
