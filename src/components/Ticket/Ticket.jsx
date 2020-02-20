@@ -9,6 +9,7 @@ import polygonCircle from 'util/polygonCircle';
 import { day } from 'util/timeConst';
 import useDrawQrCode from 'hooks/useQrCode';
 import { ticketActions } from 'stores/tickets';
+import { MoreIcon } from 'components/Icons';
 
 const fadeIn = keyframes`
   from {
@@ -101,7 +102,17 @@ const DeleteButton = styled.div`
   right: 0;
   top: 0;
   height: 2em;
-  background: red;
+  padding-right: 0.5em;
+  padding-left: 2em;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > svg {
+    height: 1em;
+    width: 1em;
+    opacity: 0.8;
+  }
 `;
 
 const DeleteModal = styled.div`
@@ -216,14 +227,16 @@ const Ticket = ({ journeys, code, id }) => {
             hidden={isFlipped}
           />
         )}
-        <DeleteButton onClick={deleteClick} />
+        <DeleteButton onClick={deleteClick}>
+          <MoreIcon />
+        </DeleteButton>
         <DeleteModal _deleting={isDeleting}>
           <DeleteModalText>Do you want to delete this ticket?</DeleteModalText>
-          <DeleteModalButton onClick={clickCancelDelete} primary>
-            Cancel
-          </DeleteModalButton>
-          <DeleteModalButton onClick={clickConfirmDelete}>
+          <DeleteModalButton primary onClick={clickConfirmDelete}>
             Confirm
+          </DeleteModalButton>
+          <DeleteModalButton onClick={clickCancelDelete}>
+            Cancel
           </DeleteModalButton>
         </DeleteModal>
       </TicketContentContainer>
