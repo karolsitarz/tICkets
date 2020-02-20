@@ -17,4 +17,4 @@ const Main = () => (
 );
 
 ReactDOM.render(<Main />, document.getElementById('container'));
-enableServiceWorker();
+// enableServiceWorker();
