@@ -1,13 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import TicketContent from './TicketContent';
 import JourneySwitcher from './JourneySwitcher';
 import polygonCircle from 'util/polygonCircle';
 import { day } from 'util/timeConst';
 import useDrawQrCode from 'hooks/useQrCode';
+import { ticketActions } from 'stores/tickets';
+import DeleteModal from './DeleteModal';
 
 const fadeIn = keyframes`
   from {
@@ -18,6 +20,7 @@ const fadeIn = keyframes`
 const TicketContainer = styled.div`
   width: 15em;
   height: 100%;
+  min-height: 19em;
   max-height: 25em;
   margin: 0 3vw;
   pointer-events: auto;
@@ -34,6 +37,7 @@ const TicketSide = styled.div`
   right: 0;
   border-radius: 2em;
   transition: transform 0.35s ease;
+  transform: rotateY(0);
   overflow: hidden;
   clip-path: ${`polygon(
     0 0,
@@ -58,12 +62,11 @@ const TicketBackside = styled(TicketSide)`
     _disabled
       ? `linear-gradient(to bottom left, #5b4568,#9fb2d6)`
       : `linear-gradient(to bottom left, #6c00ae, #76a5ff)`};
-  transform: ${({ _flipped }) =>
-    _flipped ? 'rotateY(-180deg)' : 'rotateY(0)'};
+  transform: ${({ _flipped }) => _flipped && 'rotateY(-180deg)'};
 `;
 
 const TicketContentContainer = styled(TicketSide)`
-  transform: ${({ _flipped }) => (_flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
+  transform: ${({ _flipped }) => _flipped && 'rotateY(180deg)'};
   background-image: ${({ _disabled }) =>
     _disabled
       ? `linear-gradient(to bottom right, #5b4568,#9fb2d6)`
@@ -93,9 +96,10 @@ const QrCanvas = styled.canvas`
   left: 10%;
 `;
 
-const Ticket = ({ journeys, code }) => {
+const Ticket = ({ journeys, code, id }) => {
   const time = useSelector(({ time }) => time);
   const [isFlipped, setFlipped] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
   const [activeJourney, setActiveJourney] = useState(
     (() => {
       for (let i = journeys.length - 1; i >= 0; i--)
@@ -104,27 +108,41 @@ const Ticket = ({ journeys, code }) => {
     })()
   );
   const disabled = journeys[journeys.length - 1].destination.time + day < time;
-
   const canvas = useRef(null);
+  const dispatch = useDispatch();
   const drawQrCode = useDrawQrCode(code, canvas.current);
 
   const onClickHandle = useCallback(() => {
     if (isFlipped) return;
+    if (isDeleting) return;
 
     setFlipped(true);
     drawQrCode();
-    document.addEventListener('click', outClick);
-  }, [isFlipped]);
+    document.addEventListener('click', outClickFlip);
+  }, [isFlipped, isDeleting]);
 
-  const outClick = () => {
+  const outClickFlip = () => {
     setFlipped(false);
-    document.removeEventListener('click', outClick);
+    document.removeEventListener('click', outClickFlip);
   };
 
   const buttonClick = useCallback(step => {
     if (isFlipped) return;
+    if (isDeleting) return;
     setActiveJourney(activeJourney + step);
   });
+
+  const deleteClick = useCallback(e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDeleting(true);
+  });
+
+  const clickCancelDelete = useCallback(() => setDeleting(false));
+
+  const clickConfirmDelete = useCallback(() =>
+    dispatch(ticketActions.deleteTicket(id))
+  );
 
   return (
     <TicketContainer onClick={onClickHandle}>
@@ -151,6 +169,12 @@ const Ticket = ({ journeys, code }) => {
             hidden={isFlipped}
           />
         )}
+        <DeleteModal
+          visible={isDeleting}
+          confirm={clickConfirmDelete}
+          cancel={clickCancelDelete}
+          toggle={deleteClick}
+        />
       </TicketContentContainer>
     </TicketContainer>
   );
@@ -175,7 +199,8 @@ Ticket.propTypes = {
       })
     })
   ),
-  code: PropTypes.arrayOf(PropTypes.bool)
+  code: PropTypes.arrayOf(PropTypes.bool),
+  id: PropTypes.string
 };
 
 export default Ticket;

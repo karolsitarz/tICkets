@@ -23,7 +23,7 @@ const TicketList = () => {
   return (
     <ScrollInput parent={TicketScrollContainer} horizontal>
       {tickets.map(({ id, code, journeys }) => (
-        <Ticket key={id} code={code} journeys={journeys} />
+        <Ticket id={id} key={id} code={code} journeys={journeys} />
       ))}
     </ScrollInput>
   );
