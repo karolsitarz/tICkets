@@ -32,10 +32,9 @@ const getDataById = (data, i, buyDate) => ({
   },
   train: {
     id: data[i],
-    car: data[i + 1],
-    seat: data[i + 3]
-  },
-  distance: data[i + 2]
+    car: !isNaN(data[i + 2]) ? data[i + 1] : null,
+    seat: !isNaN(data[i + 2]) ? data[i + 3] : null
+  }
 });
 
 const mapData = data => {

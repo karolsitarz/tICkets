@@ -110,16 +110,16 @@ const TicketContent = ({ journey, active, isFirst, isLast }) => {
       <BottomInfo>
         <TextWithIcon>
           <TrainFrontIcon />
-          {journey.train.id}
+          {journey.train.id || '-'}
         </TextWithIcon>
         <CarSeatInfo>
           <TextWithIcon>
             <TrainSideIcon />
-            {journey.train.car}
+            {journey.train.car || '-'}
           </TextWithIcon>
           <TextWithIcon>
             <SeatIcon />
-            {journey.train.seat}
+            {journey.train.seat || '-'}
           </TextWithIcon>
         </CarSeatInfo>
       </BottomInfo>
